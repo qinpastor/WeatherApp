@@ -1,0 +1,16 @@
+/*
+ *
+ * WeatherAppContainer constants
+ *
+ */
+
+export const WEATHER_DATA_INIT = 'WEATHER_DATA_INIT';
+export const WEATHER_DATA_START = 'WEATHER_DATA_START';
+export const WEATHER_DATA_SUCCESS = 'WEATHER_DATA_SUCCESS';
+export const WEATHER_DATA_FAIL = 'WEATHER_DATA_FAIL';
+export const SET_WEATHER_DATA = 'SET_WEATHER_DATA';
+
+export const FETCH_SEARCHED_CITY = 'FETCH_SEARCHED_CITY';
+
+export const FETCH_WEATHER_DATA = 'FETCH_WEATHER_DATA';
+export const FETCH_CLICKED_CITY = 'FETCH_CLICKED_CITY';
