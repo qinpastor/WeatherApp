@@ -11,7 +11,7 @@ const selectWeatherAppContainerDomain = state =>
 const makeSelectWeatherAppContainer = () =>
   createSelector(
     selectWeatherAppContainerDomain,
-    substate => substate.weather,
+    substate => substate,
   );
 
 const makeSelectCitySearch = () =>

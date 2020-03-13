@@ -1,6 +1,6 @@
 /**
  *
- * Asynchronously loads the component for WeatherDataComponent
+ * Asynchronously loads the component for HourlyDataComponent
  *
  */
 

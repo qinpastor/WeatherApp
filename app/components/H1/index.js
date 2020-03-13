@@ -1,8 +1,19 @@
 import styled from 'styled-components';
 
 const H1 = styled.h1`
-  font-size: 2em;
-  margin-bottom: 0.25em;
+    margin: 100px auto;
+    font-size: 25px;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    position: relative;
+    text-indent: -9999em;
+    -webkit-animation: load5 1.1s infinite ease;
+    animation: load5 1.1s infinite ease;
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+  }
 `;
 
 export default H1;

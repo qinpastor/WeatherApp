@@ -1,6 +1,6 @@
 /**
  *
- * Tests for WeatherDataComponent
+ * Tests for HourlyDataComponent
  *
  * @see https://github.com/react-boilerplate/react-boilerplate/tree/master/docs/testing
  *
@@ -10,12 +10,12 @@ import React from 'react';
 import { render } from 'react-testing-library';
 // import 'jest-dom/extend-expect'; // add some helpful assertions
 
-import WeatherDataComponent from '../index';
+import HourlyDataComponent from '../index';
 
-describe('<WeatherDataComponent />', () => {
+describe('<HourlyDataComponent />', () => {
   it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
-    render(<WeatherDataComponent />);
+    render(<HourlyDataComponent />);
     expect(spy).not.toHaveBeenCalled();
   });
 
@@ -31,7 +31,7 @@ describe('<WeatherDataComponent />', () => {
   it.skip('Should render and match the snapshot', () => {
     const {
       container: { firstChild },
-    } = render(<WeatherDataComponent />);
+    } = render(<HourlyDataComponent />);
     expect(firstChild).toMatchSnapshot();
   });
 });

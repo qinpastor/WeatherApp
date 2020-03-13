@@ -1,12 +1,4 @@
-/**
- *
- * WeatherAppContainer
- *
- */
-
-import React, { memo, useState } from 'react';
-import { Link } from 'react-router-dom';
-//import PropTypes from 'prop-types';
+import React, { memo, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
@@ -31,14 +23,17 @@ export function WeatherAppContainer(props) {
 
   const [userEnteredCity, setUserEnteredCity] = useState('');
 
+  const [isRendered, setIsRendered] = useState({ loading: false });
+
   const submitHandler = event => {
     event.preventDefault();
+    setIsRendered({ loading: true });
     props.onfetchSearchedCity(userEnteredCity);
   };
 
-  const clickDataHandler = id => {
-    props.onclickDataHandler(id, userEnteredCity);
-  };
+  useEffect(() => {
+    setIsRendered({ loading: false });
+  }, []);
 
   return (
     <Body>
@@ -46,7 +41,7 @@ export function WeatherAppContainer(props) {
         <title>WeatherAppContainer</title>
         <meta name="description" content="Description of WeatherAppContainer" />
       </Helmet>
-      Welcome
+      Welcome to {userEnteredCity}
       <form onSubmit={submitHandler}>
         <Search
           type="text"
@@ -56,23 +51,14 @@ export function WeatherAppContainer(props) {
           }}
         />
       </form>
-      <Link to={'/signup'}>
+      {isRendered && (
         <WeatherForeCastComponent
-          weatherData={props.weatherAppContainer}
-          onClick={id => {
-            clickDataHandler(id);
-          }}
-          // onClick={id => {
-          //   setClickedDay(id);
+          weatherData={props.weatherAppContainer.weather}
         />
-      </Link>
+      )}
     </Body>
   );
 }
-
-// WeatherAppContainer.propTypes = {
-//   dispatch: PropTypes.func.isRequired,
-// };
 
 const mapStateToProps = createStructuredSelector({
   weatherAppContainer: makeSelectWeatherAppContainer(),
@@ -83,11 +69,15 @@ function mapDispatchToProps(dispatch) {
   return {
     onfetchSearchedCity: enteredCity =>
       dispatch(actions.fetchSearchedCity(enteredCity)),
-    onclickDataHandler: (clickedDay, userEnteredCity) =>
-      dispatch(actions.fetchSearchedCityByClick(clickedDay, userEnteredCity)),
   };
 }
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
-export default compose(withConnect, memo)(WeatherAppContainer);
+export default compose(
+  withConnect,
+  memo,
+)(WeatherAppContainer);

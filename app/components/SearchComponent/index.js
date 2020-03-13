@@ -1,14 +1,7 @@
-/**
- *
- * SearchComponent
- *
- */
-
 import React from 'react';
 import { Button } from 'antd';
 import PropTypes from 'prop-types';
 import 'antd/dist/antd.css';
-// import styled from 'styled-components';
 
 const SearchComponent = ({ onChange }) => (
   <div>
