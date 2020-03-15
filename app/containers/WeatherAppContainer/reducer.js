@@ -1,8 +1,3 @@
-/*
- *
- * WeatherAppContainer reducer
- *
- */
 import produce from 'immer';
 import * as actionTypes from './constants';
 export const initialState = {
@@ -13,10 +8,6 @@ const weatherAppContainerReducer = (state = initialState, action) =>
   // eslint-disable-next-line consistent-return
   produce(state, draft => {
     switch (action.type) {
-      case actionTypes.WEATHER_DATA_START:
-        // eslint-disable-next-line no-param-reassign
-        draft.state = '';
-        break;
       case actionTypes.WEATHER_DATA_SUCCESS:
         // eslint-disable-next-line no-param-reassign
         draft.weather = action.weather;

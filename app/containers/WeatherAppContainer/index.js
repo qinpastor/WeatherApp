@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect } from 'react';
+import React, { memo, useState } from 'react';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
@@ -6,6 +6,7 @@ import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
+import PropTypes from 'prop-types';
 import {
   makeSelectWeatherAppContainer,
   makeSelectCitySearch,
@@ -16,6 +17,7 @@ import Search from '../../components/SearchComponent/index';
 import WeatherForeCastComponent from '../../components/WeatherForeCastComponent/index';
 import * as actions from './actions';
 import Body from '../../components/Background';
+import { StyledInput } from '../../components/DataCard/index';
 
 export function WeatherAppContainer(props) {
   useInjectReducer({ key: 'weatherAppContainer', reducer });
@@ -23,17 +25,10 @@ export function WeatherAppContainer(props) {
 
   const [userEnteredCity, setUserEnteredCity] = useState('');
 
-  const [isRendered, setIsRendered] = useState({ loading: false });
-
   const submitHandler = event => {
     event.preventDefault();
-    setIsRendered({ loading: true });
     props.onfetchSearchedCity(userEnteredCity);
   };
-
-  useEffect(() => {
-    setIsRendered({ loading: false });
-  }, []);
 
   return (
     <Body>
@@ -42,23 +37,28 @@ export function WeatherAppContainer(props) {
         <meta name="description" content="Description of WeatherAppContainer" />
       </Helmet>
       Welcome to {userEnteredCity}
-      <form onSubmit={submitHandler}>
-        <Search
-          type="text"
-          value={userEnteredCity}
-          onChange={event => {
-            setUserEnteredCity(event.target.value);
-          }}
-        />
-      </form>
-      {isRendered && (
-        <WeatherForeCastComponent
-          weatherData={props.weatherAppContainer.weather}
-        />
-      )}
+      <StyledInput>
+        <form onSubmit={submitHandler}>
+          <Search
+            type="text"
+            value={userEnteredCity}
+            onChange={event => {
+              setUserEnteredCity(event.target.value);
+            }}
+          />
+        </form>
+      </StyledInput>
+      <WeatherForeCastComponent
+        weatherData={props.weatherAppContainer.weather}
+      />
     </Body>
   );
 }
+
+WeatherAppContainer.propTypes = {
+  weatherAppContainer: PropTypes.object,
+  onfetchSearchedCity: PropTypes.func,
+};
 
 const mapStateToProps = createStructuredSelector({
   weatherAppContainer: makeSelectWeatherAppContainer(),

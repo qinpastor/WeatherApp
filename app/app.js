@@ -38,7 +38,7 @@ const render = messages => {
         <ConnectedRouter history={history}>
           <Switch>
             <Route exact path="/" component={App} />
-            <Route path="/weatherdata" component={WeatherForeCastComponent} />
+            <Route path="/weakly" component={WeatherForeCastComponent} />
             <Route
               path="/hourly"
               render={propsData => (

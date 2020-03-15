@@ -1,6 +1,16 @@
 import React, { memo, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { StyledDiv, StyledLi, StyledSpan, StyledImg } from '../DataCard/index';
+import { Spin, Button } from 'antd';
+import PropTypes from 'prop-types';
+import {
+  StyledDiv,
+  StyledLi,
+  StyledSpan,
+  StyledImg,
+  StyledSpan2,
+  StyledSpan3,
+} from '../DataCard/index';
+import Body from '../Background/index';
 
 const HourlyDataComponent = ({ hourlyData }) => {
   const [hData, setHData] = useState({ loading: true, hour: [] });
@@ -11,27 +21,27 @@ const HourlyDataComponent = ({ hourlyData }) => {
     fetch(url)
       .then(response => response.json())
       .then(responseData => {
-        const fetchHourDay = [];
-        for (let key in responseData.list) {
-          const dateWeather = responseData.list[key].dt_txt.split(' ');
-          if (dateWeather[0] === id) {
-            fetchHourDay.push({
-              id: key,
-              time: dateWeather[1],
-              date: responseData.list[key].dt_txt,
-              icon: responseData.list[key].weather[0].icon,
-              temp_max: responseData.list[key].main.temp_max,
-              temp_min: responseData.list[key].main.temp_min,
-              main: responseData.list[key].weather[0].main,
-              date: dateWeather[0],
-            });
-          }
-        }
-        setHData({ loading: false, hour: fetchHourDay });
+        const fetchWeatherData = [];
+        responseData.list.map(weatherData => {
+          const checkDay = weatherData.dt_txt.split(' ');
+          fetchWeatherData.push({
+            id: weatherData.dt,
+            time: checkDay[1],
+            icon: weatherData.weather[0].icon,
+            temp_max: weatherData.main.temp_max,
+            temp_min: weatherData.main.temp_min,
+            main: weatherData.weather[0].main,
+            date: checkDay[0],
+          });
+        });
+        const weathers = fetchWeatherData.filter(
+          weather => weather.date === id,
+        );
+        setHData({ loading: false, hour: weathers });
       });
   }, []);
 
-  let load = <h1>Please wait for the Data</h1>;
+  let load = <Spin />;
 
   if (!hData.loading) {
     load = (
@@ -46,8 +56,12 @@ const HourlyDataComponent = ({ hourlyData }) => {
                   src={`http://openweathermap.org/img/w/${icon}.png`}
                 />
               </StyledSpan>
-              <StyledSpan>{tempMin}°</StyledSpan>
-              <StyledSpan>{tempMax}°</StyledSpan>
+              <div>
+                <StyledSpan2>{tempMin}°</StyledSpan2>
+              </div>
+              <div>
+                <StyledSpan3>{tempMax}°</StyledSpan3>
+              </div>
             </StyledLi>
           );
         })}
@@ -58,12 +72,29 @@ const HourlyDataComponent = ({ hourlyData }) => {
   const { id } = hourlyData;
 
   return (
-    <StyledDiv>
-      <h1>Hourly forecast for {id} </h1>
-      {load}
-      <Link to="/">Go Back</Link>
-    </StyledDiv>
+    <Body>
+      <StyledDiv>
+        <h1>Hourly forecast for {id} </h1>
+        {load}
+        <br />
+        <Link
+          to={{
+            pathname: '/',
+            state: {
+              loading: false,
+            },
+          }}
+        >
+          <Button type="primary" shape="round">
+            Go Back
+          </Button>
+        </Link>
+      </StyledDiv>
+    </Body>
   );
 };
 
+HourlyDataComponent.propTypes = {
+  hourlyData: PropTypes.object,
+};
 export default memo(HourlyDataComponent);
