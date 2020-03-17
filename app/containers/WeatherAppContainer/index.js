@@ -15,7 +15,7 @@ import reducer from './reducer';
 import saga from './saga';
 import Search from '../../components/SearchComponent/index';
 import WeatherForeCastComponent from '../../components/WeatherForeCastComponent/index';
-import * as actions from './actions';
+import { fetchSearchedCity } from './actions';
 import Body from '../../components/Background';
 import { StyledInput } from '../../components/DataCard/index';
 
@@ -68,7 +68,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     onfetchSearchedCity: enteredCity =>
-      dispatch(actions.fetchSearchedCity(enteredCity)),
+      dispatch(fetchSearchedCity(enteredCity)),
   };
 }
 

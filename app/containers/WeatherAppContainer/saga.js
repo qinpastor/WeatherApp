@@ -1,8 +1,15 @@
 import { takeEvery, put } from 'redux-saga/effects';
-import * as actions from './actions';
-import * as actionTypes from './constants';
+import moment from 'moment';
+import { fetchweatherDataSuccess, fetchweatherDataFail } from './actions';
+import { FETCH_WEATHER_DATA_ACTION } from './constants';
+
 const d = new Date();
-const cHours = d.getHours();
+const cHours =
+  // moment(d)
+  //   .format('HH:mm:ss')
+  //   .toString();
+  d.getHours();
+// const dtime = moment(d).format('HH:mm:ss');
 let timeSlot = '';
 if (cHours >= 0 && cHours < 3) {
   timeSlot = '00:00:00';
@@ -22,17 +29,23 @@ if (cHours >= 0 && cHours < 3) {
   timeSlot = '21:00:00';
 }
 
+const dtime = moment(d).format('HH:mm:ss');
+
+console.log(dtime);
+
+const baseURL = city => {
+  const url = `http://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=e3a189f56990c616151bb2a3110332bc`;
+  return url;
+};
+
 export function* fetchSearchedCitySaga(action) {
   try {
     const { city } = action;
-    const url = yield fetch(
-      `http://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=e3a189f56990c616151bb2a3110332bc`,
-    );
+    const url = yield fetch(baseURL(city));
     const response = yield url.json();
-    const fetchWeatherData = [];
-    response.list.map(weatherData => {
+    const fetchWeatherData = response.list.map(weatherData => {
       const checkDay = weatherData.dt_txt.split(' ');
-      fetchWeatherData.push({
+      return {
         id: checkDay[0],
         description: weatherData.weather[0].description,
         icon: weatherData.weather[0].icon,
@@ -41,18 +54,18 @@ export function* fetchSearchedCitySaga(action) {
         date: checkDay[0],
         time: checkDay[1],
         enteredCity: city,
-      });
+      };
     });
 
     const weathers = fetchWeatherData.filter(
       weather => weather.time === timeSlot,
     );
-    yield put(actions.fetchweatherDataSuccess(weathers));
+    yield put(fetchweatherDataSuccess(weathers));
   } catch (error) {
-    yield put(actions.fetchweatherDataFail(error));
+    yield put(fetchweatherDataFail(error));
   }
 }
 
 export default function* watchWeather() {
-  yield takeEvery(actionTypes.FETCH_WEATHER_DATA, fetchSearchedCitySaga);
+  yield takeEvery(FETCH_WEATHER_DATA_ACTION, fetchSearchedCitySaga);
 }

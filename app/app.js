@@ -10,7 +10,7 @@ import history from 'utils/history';
 import 'sanitize.css/sanitize.css';
 
 import App from 'containers/WeatherAppContainer';
-import LanguageProvider from 'containers/LanguageProvider';
+// import LanguageProvider from 'containers/LanguageProvider';
 import HourlyDataComponent from './components/HourlyDataComponent/index';
 
 import '!file-loader?name=[name].[ext]!./images/favicon.ico';
@@ -31,24 +31,24 @@ const initialState = {};
 const store = configureStore(initialState, history);
 const MOUNT_NODE = document.getElementById('app');
 
-const render = messages => {
+const render = () => {
   ReactDOM.render(
     <Provider store={store}>
-      <LanguageProvider messages={messages}>
-        <ConnectedRouter history={history}>
-          <Switch>
-            <Route exact path="/" component={App} />
-            <Route path="/weakly" component={WeatherForeCastComponent} />
-            <Route
-              path="/hourly"
-              render={propsData => (
-                <HourlyDataComponent hourlyData={propsData.location.state} />
-              )}
-            />
-            <Redirect from="hourly" to="/" />
-          </Switch>
-        </ConnectedRouter>
-      </LanguageProvider>
+      {/* <LanguageProvider messages={messages}> */}
+      <ConnectedRouter history={history}>
+        <Switch>
+          <Route exact path="/" component={App} />
+          <Route path="/weakly" component={WeatherForeCastComponent} />
+          <Route
+            path="/hourly"
+            render={propsData => (
+              <HourlyDataComponent hourlyData={propsData.location.state} />
+            )}
+          />
+          <Redirect from="hourly" to="/" />
+        </Switch>
+      </ConnectedRouter>
+      {/* </LanguageProvider> */}
     </Provider>,
     MOUNT_NODE,
   );
@@ -58,7 +58,7 @@ if (module.hot) {
   // Hot reloadable React components and translation json files
   // modules.hot.accept does not accept dynamic dependencies,
   // have to be constants at compile-time
-  module.hot.accept(['./i18n', 'containers/App'], () => {
+  module.hot.accept(['./i18n'], () => {
     ReactDOM.unmountComponentAtNode(MOUNT_NODE);
     render(translationMessages);
   });

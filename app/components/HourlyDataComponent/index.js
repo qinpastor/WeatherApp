@@ -21,10 +21,9 @@ const HourlyDataComponent = ({ hourlyData }) => {
     fetch(url)
       .then(response => response.json())
       .then(responseData => {
-        const fetchWeatherData = [];
-        responseData.list.map(weatherData => {
+        const fetchWeatherData = responseData.list.map(weatherData => {
           const checkDay = weatherData.dt_txt.split(' ');
-          fetchWeatherData.push({
+          return {
             id: weatherData.dt,
             time: checkDay[1],
             icon: weatherData.weather[0].icon,
@@ -32,7 +31,7 @@ const HourlyDataComponent = ({ hourlyData }) => {
             temp_min: weatherData.main.temp_min,
             main: weatherData.weather[0].main,
             date: checkDay[0],
-          });
+          };
         });
         const weathers = fetchWeatherData.filter(
           weather => weather.date === id,
